@@ -115,9 +115,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
  
 public boolean onKeyUp(int keyCode, KeyEvent msg) {
     if(keyCode==KeyEvent.KEYCODE_DPAD_UP){
-    	jump(G_y1, G_y2);
-    }else if(keyCode==KeyEvent.KEYCODE_DPAD_DOWN){
-    	down(G_y1, G_y2);
+    	try {
+			jump(G_y1, G_y2);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }else{
     	
     }
@@ -127,41 +130,37 @@ public boolean onKeyUp(int keyCode, KeyEvent msg) {
  public boolean jumping=false;
  long cTime;//current time
  long timer;//the timer as it goes along.
- public void down(int y1, int y2){
-	 G_y1=y1+10;
-	 G_y2=y2+10;
-	 invalidate();
- }
 
- public void jump(int y1, int y2){
-	 G_y1=y1-10;
-	 G_y2=y2-10;
+//Edited by Jeremy Croll
+ public void jump(int y1, int y2) throws InterruptedException{
+
 	 invalidate();
 	 
-	 /*jumping = true;
+	 jumping = true;
       cTime = System.currentTimeMillis();
       timer=System.currentTimeMillis();
 
       //Giraffe Jump Part1
-      while((cTime+50) > timer){  //moves 20 pixils up     
+      while((cTime+1000) > timer){  //moves 20 pixils up     
           timer = System.currentTimeMillis(); //updates 
-          G_y1-=2;
-          G_y2-=2;
+          G_y1-=10;
+          G_y2-=10;
+          gameThread.sleep(50);
           invalidate();
       }
           cTime = System.currentTimeMillis();
       
-      while((cTime+50) > timer){  //moves 20 pixils up      
+      while((cTime+1000) > timer){  //moves 20 pixils up      
           timer = System.currentTimeMillis();
-          G_y1+=2;
-          G_y2+=2;
+          G_y1+=10;
+          G_y2+=10;
+          gameThread.sleep(50);
           invalidate();
            
       }
       jumping = false;
       invalidate();
      
-*/
  }
  
 	public GameThread getThread(){
