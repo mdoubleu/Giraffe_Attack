@@ -24,6 +24,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	int G_x2;
 	public GameView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
 		//lets us stay updated about changes.
 		SurfaceHolder holder=getHolder();
 		holder.addCallback(this);
@@ -109,6 +110,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	                }
 	            }
 	        }
+		public boolean doKeyUp(int keyCode, KeyEvent msg) {
+			// TODO Auto-generated method stub
+			return false;
+		}
 
 
 	}
@@ -124,7 +129,7 @@ public boolean onKeyUp(int keyCode, KeyEvent msg) {
     }else{
     	
     }
-    return true;
+    return gameThread.doKeyUp(keyCode,msg);
     
 }
  public boolean jumping=false;
@@ -133,7 +138,7 @@ public boolean onKeyUp(int keyCode, KeyEvent msg) {
 
 //Edited by Jeremy Croll
  public void jump(int y1, int y2) throws InterruptedException{
-
+	 //redraws
 	 invalidate();
 	 
 	 jumping = true;
@@ -179,6 +184,17 @@ public boolean onKeyUp(int keyCode, KeyEvent msg) {
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		// we have to tell thread to shut down & wait for it to finish, or else
+        // it might touch the Surface after we return and explode
+        boolean retry = true;
+        gameThread.setRunning(false);
+        while (retry) {
+            try {
+                gameThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+            }
+        }
 		
 	}
 }
